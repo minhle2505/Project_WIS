@@ -39,3 +39,16 @@ while True:
            return false
     return true
 results = [line for line in urls if len(line) > 50 and len(line) < 100 and isValid(line)]
+
+#this is for import into excel file
+list_cols = ["source", "title", "created_at"]
+now = datetime.datetime.now()
+created_at = [now] * len(results)
+sources = ['cafe.biz'] * len(results)
+
+dict = {'source': sources, 'title': results, 'created_at': now}
+
+df = pd.DataFrame(dict)
+
+#saving the data frame
+df.to_csv('GFG.csv')
