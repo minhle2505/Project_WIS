@@ -1,6 +1,10 @@
 from selenium import webdriver
 from time import sleep
 from selenium.webdriver.common.by import By
+import datetime
+from selenium.common.exceptions import
+NoSuchElementException
+import pandas as pd
 
 # chrome_options = Options()
 # chrome_options.add_argument("--incognito")
@@ -10,35 +14,42 @@ driver = webdriver.Chrome(executable_path = "chromedriver.exe")
 driver.maximize_window()
 driver.get('https://cafef.vn/thi-truong-chung-khoan.chn')
 sleep(3)
-count_page = 0
 urls = []
-
-while True:
-    for i in range(5):
-        driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
-        sleep(2)
+count_page = 0
+running = True
+while running and count_page < 500:
+    count_page = count_page + 1
     
-    links = driver.find_elements_by_xpath('//li[@class="tlitem clearfix ck_success"]/h3/a')
+    find_xem_them = False
+    i = 0
+    while i < 100 and not find_xem_them:
+        i = i + 1
+driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
+    try:
+    xemthem = driver.find_element_by_class_name('bt_xemthem')
+    find_xem_them = True except NoSuchElementException:
+    find_xem_them = False
+    sleep(2)
     
-    count = 0
-    
+    try:
+        xemthem = driver.find_element_by_class_name('bt_xemthem')
+        xemthem.click()
+        except NoSuchElementException
+        running = False
+    links = driver.find_elements_by_xpath('//li[@class="tlitem clearfix ck_success"]/h3/a') 
     for link in links:
-        print(link.text)
         url = link.get_attribute('title')
-        # print(url)
+        print(link.text)
         urls.append(url)
     
-    xemthem = driver.find_element_by_class_name('bt_xemthem')
-    xemthem.click()
-    
  def isValid(line):
- #need to define all special characters here
-    special_chars = ['%', '^', '&']
-    for c in special_chars:
-      if c in line:
-           return false
-    return true
-results = [line for line in urls if len(line) > 50 and len(line) < 100 and isValid(line)]
+# need to define all special characters here
+#   special_chars = ['%', '^', '&']
+#   for c in special_chars:
+#       if c in line:
+#           return false
+#   return true
+# results = [line for line in urls if len(line) > 50 and len(line) < 100 and isValid(line)]
 
 #this is for import into excel file
 list_cols = ["source", "title", "created_at"]
